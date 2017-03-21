@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">Quake Browser</string>
+    <string name="app_info">Earthquake Browser v1.0.0 \n
+        Developed by: Jeremy Shiemke \n
+        Credit to: Udacity - Android Basics \n
+        Leave feedback on Play Store. \n
+        Thank you!</string>
+    <string name="search_activity">Custom Search</string>
+    <string name="action_settings">Select quake search:</string>
+    <string name="near_the">Near the</string>
+    <string name="mag_abbr">Mag</string>
+    <string name="location">Location</string>
+    <string name="date">Date</string>
+    <string name="cancel">Cancel</string>
+    <string name="info">App Info</string>
+    <string name="count">Results count: </string>
+
+    <string name="one_day_date">1 day 2.5+ (by Date)</string>
+    <string name="one_day_mag">1 day 2.5+ (by Mag)</string>
+    <string name="recent_sig_date">30 days 5.0+ (by Date)</string>
+    <string name="recent_sig_mag">30 days 5.0+ (by Mag)</string>
+    <string name="nearby1_date">Nearby+100Km (by Date)</string>
+    <string name="nearby1_mag">Nearby+100Km (by Mag)</string>
+    <string name="nearby2_date">Nearby+250Km (by Date)</string>
+    <string name="nearby2_mag">Nearby+250Km (by Mag)</string>
+    <string name="custom_search">Custom Search...</string>
+    <string name="about">About...</string>
+
+        <string name="from_date">From:</string>
+        <string name="to_date">To:</string>
+        <string name="min_mag">minMag</string>
+        <string name="search_radius">Search radius:</string>
+        <string name="radius">Radius in Km</string>
+        <string name="kilometers">Km</string>
+        <string name="minimum_magnitude">Minimum magnitude:</string>
+        <string name="magnitude">Minimum magnitude:</string>
+        <string name="max_results">Maximum results returned:</string>
+        <string name="results">Maximum results:</string>
+        <string name="select_date">Date range for search.</string>
+        <string name="select_location">Search location and radius.</string>
+        <string name="sort_by">Sort by:</string>
+        <string name="time">time</string>
+        <string name="mag">magnitude</string>
+        <string name="search">Search</string>
+
+        <string name="not_found">Not Found...</string>
+        <string name="getting_data">Getting USGS earthquake data...</string>
+        <string name="data_error">No data. Try new search.</string>
+        <string name="location_permissions">Location permissions required to get current location</string>
+
+
+        <string-array name="radius">
+            <item>100</item>
+            <item>250</item>
+            <item>500</item>
+            <item>1000</item>
+            <item>2500</item>
+            <item>5000</item>
+        </string-array>
+
+        <string-array name="magnitude">
+            <item>0</item>
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+            <item>4</item>
+            <item>5</item>
+            <item>6</item>
+            <item>7</item>
+            <item>8</item>
+            <item>9</item>
+        </string-array>
+
+        <string-array name="max_results">
+            <item>20</item>
+            <item>50</item>
+            <item>100</item>
+            <item>250</item>
+            <item>500</item>
+        </string-array>
+
+
+    </resources>

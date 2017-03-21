@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e3f2fd"
+    android:padding="32dp"
+    android:orientation="vertical"
+    tools:context=".CustomSearchActivity">
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:text="@string/select_date" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/from_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/from_date"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/etxt_fromdate"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            tools:text="2017-08-08"
+            android:background="@color/colorAccent"
+            android:elevation="0dp" />
+
+        <TextView
+            android:id="@+id/to_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:text="@string/to_date"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/etxt_todate"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            tools:text="2017-08-08"
+            android:elevation="0dp"
+            android:background="@color/colorAccent" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/locationTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/select_location" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/locationEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:paddingStart="8dp"
+            android:paddingLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:ems="30"
+            android:imeOptions="actionSearch"
+            android:inputType="textPostalAddress"
+            android:background="@color/colorAccent" />
+
+        <Button
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignEnd="@+id/locationEditText"
+            android:layout_alignRight="@+id/locationEditText"
+            android:layout_alignBottom="@+id/locationEditText"
+            android:alpha="0.4"
+            android:layout_margin="4dp"
+            android:id="@+id/clearTextButton"
+            android:background="@android:drawable/ic_delete" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/radiusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:text="@string/search_radius" />
+
+        <Spinner
+            android:id="@+id/radiusSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginLeft="8dp"
+            android:paddingTop="8dp"
+            android:entries="@array/radius"
+            android:spinnerMode="dialog"
+            android:prompt="@string/radius"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/kmText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/kilometers" />
+
+    </LinearLayout>
+
+    <TextView
+        android:text="@string/minimum_magnitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:id="@+id/magnitudeTextView" />
+
+    <Spinner
+        android:layout_width="42dp"
+        android:layout_height="32dp"
+        android:spinnerMode="dialog"
+        android:prompt="@string/magnitude"
+        android:id="@+id/magnitudeSpinner"
+        android:entries="@array/magnitude"
+        android:background="@color/colorAccent" />
+
+    <TextView
+        android:text="@string/max_results"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:id="@+id/resultsTextView" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:spinnerMode="dialog"
+        android:prompt="@string/results"
+        android:id="@+id/resultsSpinner"
+        android:entries="@array/max_results"
+        android:background="@color/colorAccent" />
+
+
+    <RadioGroup
+        android:id="@+id/sortRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:checkedButton="@+id/timeRadioButton"
+        android:paddingTop="16dp" >
+
+        <TextView
+            android:text="@string/sort_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sortTextView" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="@string/time"
+            android:id="@+id/timeRadioButton" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="@string/mag"
+            android:id="@+id/magRadioButton" />
+
+    </RadioGroup>
+
+    <Button
+        android:text="@string/search"
+        android:background="@color/colorAccent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/searchButton" />
+
+</LinearLayout>
