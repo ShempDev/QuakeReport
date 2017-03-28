@@ -2,6 +2,8 @@ package com.example.android.quakereport;
 
 /**
  * Created by shiemke on 12/17/16.
+ * This class is used to construct our earthquake data type.
+ * Includes methods to get the data components.
  */
 
 public class QuakeData {
@@ -38,6 +40,7 @@ public class QuakeData {
     public String getDate (){
         return mDate;
     }
+
     //get the earthquake details web page url as String
     public String getUrl() { return mUrl;}
 }

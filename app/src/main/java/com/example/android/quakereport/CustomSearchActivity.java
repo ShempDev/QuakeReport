@@ -1,5 +1,15 @@
 package com.example.android.quakereport;
 
+/*
+* Created by Jeremy Shiemke 01/10/17
+* This Class creates a new activity used to build a custom earthquake query
+* Methods implemented:
+ * Select dates using date picker dialog
+ * Google Location GPS to get Current location as starting point
+ * GeoCoder to convert long/lat to address and vice/versa
+ * Spinners to select other search options
+ * Once complete, send the query URL back to the main activity.
+ */
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -47,7 +57,6 @@ public class CustomSearchActivity extends AppCompatActivity implements OnClickLi
         GoogleApiClient.OnConnectionFailedListener{
 
 	//UI References
-    final private int MY_RESULT = 586;
     private Button fromDateEtxt;
 	private Button toDateEtxt;
     private String fromDate;
@@ -90,11 +99,9 @@ public class CustomSearchActivity extends AppCompatActivity implements OnClickLi
 		findViewsById();
 		setDateTimeField();
         mGoogleApiClient.connect();
-        //displayLocation();
-
-        //getLocation();
 	}
 
+	// This method set's up our views and initializes the data
 	private void findViewsById() {
         Calendar cal = Calendar.getInstance(); //Initiate a calendar object
         Date today = cal.getTime(); //set today's date
@@ -132,7 +139,6 @@ public class CustomSearchActivity extends AppCompatActivity implements OnClickLi
 	            newDate.set(year, monthOfYear, dayOfMonth);
                 toDate = dateFormatter.format(newDate.getTime());
 	            toDateEtxt.setText(toDate);
-                //updateParamaters();
 	        }
 
 	    },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -156,29 +162,33 @@ public class CustomSearchActivity extends AppCompatActivity implements OnClickLi
     }
 
     //method to complete the location field using Geocoder to fill with first location found
-    //from users input string
+    //from users input string. This is called once the location api connects/completes.
     public void getLocation(){
-
         final Geocoder coder = new Geocoder(this);
         final TextView locationView = (TextView) findViewById(R.id.locationEditText);
         //currentAddress should be long/lat from location service API
         locationView.setText(currentAddress);
-
+        /*
+        * This edit text listener will accept a location input and attempt to find an address.
+        * If an address is found, we can get the long/lat data for our query.
+        * As is, it only returns one address based on input. A nice feature to add
+        * would be to pop up a selection dialog with multiple location options.
+         */
         locationView.setOnEditorActionListener(new TextView.OnEditorActionListener(){
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if(id == EditorInfo.IME_ACTION_SEARCH | id == EditorInfo.IME_ACTION_NEXT) {
-                    // hide virtual keyboard
+                    // hide virtual keyboard on search key pressed or tabbed to next item.
                     InputMethodManager imm =
                             (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(locationView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     String location = locationView.getText().toString();
-                    try {    //just taking first location returned from Geocoder for now
+                    try {    //just taking first location returned from Geocoder for now.
                         ArrayList<Address> addresses = (ArrayList<Address>) coder.getFromLocationName(location, 1);
                         if(addresses.size() == 0){
                             locationView.setText(R.string.not_found);
 
-                        } else {   //update the location field
+                        } else {   //update the location field with geocoder address info.
                                 longitude = addresses.get(0).getLongitude();
                                 latitude = addresses.get(0).getLatitude();
                                 currentAddress = addresses.get(0).getLocality() + ", "
@@ -194,7 +204,7 @@ public class CustomSearchActivity extends AppCompatActivity implements OnClickLi
                 return false;
             }
         });
-        // Force the onEditorAction to complete our first geocoder instance
+        // Force the onEditorAction to complete our first geocoder instance on activity create
         locationView.onEditorAction(EditorInfo.IME_ACTION_SEARCH);
 
     }
@@ -218,7 +228,7 @@ public class CustomSearchActivity extends AppCompatActivity implements OnClickLi
         } else {
             mSortBy = "magnitude";
         }
-
+        // Build the USGS string from the above view selections
         usgsQueryString = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson";
         usgsQueryString += "&starttime=" + fromDate + "&endtime=" + toDate;
         if (!currentAddress.isEmpty()) { //ignore location if blank
@@ -228,13 +238,11 @@ public class CustomSearchActivity extends AppCompatActivity implements OnClickLi
         usgsQueryString += "&limit=" + mResults;
         usgsQueryString += "&orderby=" + mSortBy;
 
-        //Log.i("USGS", usgsQueryString);
-
         //need to return the usgs query string back to the main activity
         Intent resultIntent = new Intent();
         resultIntent.setData(Uri.parse(usgsQueryString));
         setResult(Activity.RESULT_OK, resultIntent);
-        finish();
+        finish(); //Activity is done, we can close and return to main activity.
     }
 
     // listener method to clear the editText when the delete button is clicked
@@ -279,7 +287,6 @@ public class CustomSearchActivity extends AppCompatActivity implements OnClickLi
 
     @Override
     public void onConnected(Bundle arg0) {
-
         // Once connected with google api, get the location
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -313,7 +320,5 @@ public class CustomSearchActivity extends AppCompatActivity implements OnClickLi
         mGoogleApiClient.disconnect();
         super.onStop();
     }
-
-
 
 }

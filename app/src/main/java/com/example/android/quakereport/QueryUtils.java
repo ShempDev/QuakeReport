@@ -16,6 +16,8 @@ import java.util.Locale;
 
 /**
  * Created by shiemke on 12/19/16.
+ * This class provides methods to convert a json data string to a List of type QuakeData.
+ * This class was mostly taken from the Udacity Android Basics course from Google.
  */
 
 public final class QueryUtils {
@@ -65,7 +67,6 @@ public final class QueryUtils {
                     String date = dateFormat.format(dateObject);
                 String url = properties.getString("url"); //get the quakes details url page
                 earthquakes.add(new QuakeData(mag, place, date, url)); //add to the earthquakes List
-
             }
 
         } catch (JSONException e) {

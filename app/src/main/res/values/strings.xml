@@ -17,8 +17,8 @@
 <resources>
 
     <string name="app_name">Quake Browser</string>
-    <string name="app_info">Earthquake Browser v1.0.0 \n
-        Developed by: Jeremy Shiemke \n
+    <string name="app_info">Earthquake Browser v1.0.0&#10;
+        Developed by: Shemp Development \n
         Credit to: Udacity - Android Basics \n
         Leave feedback on Play Store. \n
         Thank you!</string>
@@ -60,11 +60,11 @@
         <string name="mag">magnitude</string>
         <string name="search">Search</string>
 
-        <string name="not_found">Not Found...</string>
+        <string name="not_found">Not Found&#8230;</string>
         <string name="getting_data">Getting USGS earthquake data...</string>
         <string name="data_error">No data. Try new search.</string>
         <string name="location_permissions">Location permissions required to get current location</string>
-
+        <string name="no_internet">Internet not available \n Check settings and try again...</string>
 
         <string-array name="radius">
             <item>100</item>

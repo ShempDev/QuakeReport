@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * Created by shiemke on 12/17/16.
  * custom array adapter for the earthquake data class QuakeData
+ * Returns the List Views for our array adapter.
  */
 
 public class QuakeArrayAdapter extends ArrayAdapter<QuakeData>{
@@ -48,6 +49,7 @@ public class QuakeArrayAdapter extends ArrayAdapter<QuakeData>{
         magnitudeCircle.setColor(magnitudeColor);
 
         //get the textview for the location, split the string and set the current data
+        //puts the "NESW of" info on a seperate line
         String primaryLocation, offsetLocation;
         String location = currentQuakeData.getLocation();
 
@@ -55,11 +57,11 @@ public class QuakeArrayAdapter extends ArrayAdapter<QuakeData>{
             String[] parts = location.split(LOCATION_SEPERATOR);
             offsetLocation = parts[0] + LOCATION_SEPERATOR;
             primaryLocation = parts[1];
-        } else {
+        } else { //Loaction does not include "NESW of" so, use "Near the"
             offsetLocation = getContext().getString(R.string.near_the);
             primaryLocation = location;
         }
-
+        // Set the Location text views with above string data.
         TextView locationTextView = (TextView) listItemView.findViewById(R.id.locationView);
         locationTextView.setText(offsetLocation);
         TextView primaryLocationView = (TextView) listItemView.findViewById(R.id.location2View);
@@ -70,6 +72,15 @@ public class QuakeArrayAdapter extends ArrayAdapter<QuakeData>{
         dateTextView.setText(currentQuakeData.getDate());
 
         return listItemView;
+    }
+
+    @Override // don't count the last adapter item; this is where we hid the search method data.
+    public int getCount() {
+        if (super.getCount() > 1) { //make sure we have more than one item
+            return (super.getCount() - 1);
+        } else {
+            return super.getCount();
+        }
     }
 
     private int getMagnitudeColor(int magnitude) {
