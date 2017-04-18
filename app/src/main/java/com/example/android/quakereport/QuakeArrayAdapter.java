@@ -74,15 +74,6 @@ public class QuakeArrayAdapter extends ArrayAdapter<QuakeData>{
         return listItemView;
     }
 
-    @Override // don't count the last adapter item; this is where we hid the search method data.
-    public int getCount() {
-        if (super.getCount() > 1) { //make sure we have more than one item
-            return (super.getCount() - 1);
-        } else {
-            return super.getCount();
-        }
-    }
-
     private int getMagnitudeColor(int magnitude) {
         switch (magnitude) {
             case 0:

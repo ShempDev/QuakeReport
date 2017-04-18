@@ -17,11 +17,11 @@
 <resources>
 
     <string name="app_name">Quake Browser</string>
-    <string name="app_info">Earthquake Browser v1.0.0&#10;
-        Developed by: Shemp Development \n
-        Credit to: Udacity - Android Basics \n
-        Leave feedback on Play Store. \n
-        Thank you!</string>
+    <string name="app_info">Earthquake Browser v1.0.2
+        \nShemp Development &#169;2017
+        \nCredit to: Udacity - Android Basics
+        \nLeave feedback on Play Store.
+        \n Thank you!</string>
     <string name="search_activity">Custom Search</string>
     <string name="action_settings">Select quake search:</string>
     <string name="near_the">Near the</string>
@@ -32,6 +32,7 @@
     <string name="info">App Info</string>
     <string name="count">Results count: </string>
 
+    <string name="pre_about_message">USGS API query method parameters:</string>
     <string name="one_day_date">1 day 2.5+ (by Date)</string>
     <string name="one_day_mag">1 day 2.5+ (by Mag)</string>
     <string name="recent_sig_date">30 days 5.0+ (by Date)</string>

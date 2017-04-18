@@ -107,10 +107,6 @@ public class EarthquakeLoader extends AsyncTaskLoader <List<QuakeData>> {
                 return null;
             } else { //ok we have valid data, convert to List of QuakeData.
                 mEarthQuakes = QueryUtils.extractQuakeDatas(result);
-                // Let's put the search info in the data so we can display in the UI.
-                if (mEarthQuakes != null) {
-                    mEarthQuakes.add(new QuakeData(-1, mSearch, Integer.toString(mEarthQuakes.size()), mUrl));
-                }
                 return mEarthQuakes;
                 //resultsCount = earthquakes.size();
             }

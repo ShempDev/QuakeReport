@@ -75,10 +75,8 @@ public final class QueryUtils {
             // with the message from the exception.
             Log.e("ERR", "Problem parsing the earthquake JSON results", e);
         }
-
         // Return the list of earthquakes
         return earthquakes;
     }
-
 
 }

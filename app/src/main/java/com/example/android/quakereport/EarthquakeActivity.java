@@ -20,6 +20,7 @@ import android.app.LoaderManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -53,13 +54,18 @@ public class EarthquakeActivity extends AppCompatActivity implements GoogleApiCl
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
     final private int MY_RESULT = 586;
     private static final String WAY_BACK_DATE = "1971-01-01"; //starting date for our nearby searches
+    //Shared preferences used to store the users last search method for activity restart.
+    private SharedPreferences myPrefs;
+    private SharedPreferences.Editor myPrefsEditor;
 
     //json query data values we need to keep for other methods
+    public static final String usgsurlKey = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson" +
+            "&minmagnitude=5.0" + "&orderby=time";
+    public static final String searchMethodKey = "Default search";
     private String usgsurl;
     private String sortBy = "time";
     private String maxRadiusKm;
     private String searchMethod;
-    private int resultsCount = 0;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     // UI item definitions
@@ -69,7 +75,6 @@ public class EarthquakeActivity extends AppCompatActivity implements GoogleApiCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
-        searchMethod = getString(R.string.recent_sig_date);
         //Let's setup our UI
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
         // Create a new {@link ArrayAdapter} of earthquakes
@@ -93,11 +98,16 @@ public class EarthquakeActivity extends AppCompatActivity implements GoogleApiCl
             }
         });
         adapter.clear();
-        //Set the USGS query url for our first search
-        if (getLoaderManager().getLoader(1) == null) { // Don't reset search if we already have loader.
-            usgsurl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson" +
-                    "&minmagnitude=5.0" + "&orderby=" + sortBy;
-        }
+        //Setup sharedpreferences to save the users last search method
+        myPrefs = getPreferences(MODE_PRIVATE);
+        myPrefsEditor = myPrefs.edit();
+        //Set the USGS query url for our first search from the sharedpreferences if exist
+        usgsurl = myPrefs.getString(usgsurlKey, usgsurlKey);
+        searchMethod = myPrefs.getString(searchMethodKey, getString(R.string.recent_sig_date));
+        //if (getLoaderManager().getLoader(1) == null) { // Don't reset search if we already have loader.
+        //    usgsurl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson" +
+        //            "&minmagnitude=5.0" + "&orderby=" + sortBy;
+        //}
         getLoaderManager().initLoader(1, null, this);
     }
 
@@ -105,12 +115,18 @@ public class EarthquakeActivity extends AppCompatActivity implements GoogleApiCl
     private void defaultSearch(String sort) {
         usgsurl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson" +
                 "&minmagnitude=5.0" + "&orderby=" + sort;
+        //save this search in our sharedpreferences editor.
+        myPrefsEditor.putString(usgsurlKey, usgsurl);
+        myPrefsEditor.apply();
         getLoaderManager().restartLoader(1, null, this);
     }
 
     private void oneDaySearch(String sort) {
         usgsurl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson" +
                 "&starttime=NOW-24hours&minmag=2.5&orderby=" + sort;
+        //save this search in our sharedpreferences editor.
+        myPrefsEditor.putString(usgsurlKey, usgsurl);
+        myPrefsEditor.apply();
         getLoaderManager().restartLoader(1, null, this);
     }
 
@@ -151,16 +167,20 @@ public class EarthquakeActivity extends AppCompatActivity implements GoogleApiCl
         usgsurl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson" +
                 "&longitude="+longitude+"&latitude="+latitude+"&maxradiuskm="+maxRadiusKm
                 + "&starttime=" + WAY_BACK_DATE + "&orderby=" + sortBy;
+        //save this search in our sharedpreferences editor.
+        myPrefsEditor.putString(usgsurlKey, usgsurl);
+        myPrefsEditor.apply();
         getLoaderManager().restartLoader(1, null, this);
     }
 
     // This method pops up a dialog to show details of the current search
     private void aboutDialog() {
         //make sure we are using the usgsurl from most recent search
-        //Get the search information from the hidden adapter item
-        usgsurl = adapter.getItem(resultsCount - 1).getUrl();
-        searchMethod = adapter.getItem(resultsCount - 1).getLocation();
-        String aboutMessage = "";
+        //Get the search information from the sharedPreferences.
+        usgsurl = myPrefs.getString(usgsurlKey, usgsurlKey);
+        searchMethod = myPrefs.getString(searchMethodKey, getString(R.string.recent_sig_date));
+        int resultsCount = adapter.getCount();
+        String aboutMessage = getString(R.string.pre_about_message);
         AlertDialog.Builder myDialog = new AlertDialog.Builder(this);
         myDialog.setTitle(searchMethod);
         myDialog.setCancelable(true);
@@ -168,9 +188,9 @@ public class EarthquakeActivity extends AppCompatActivity implements GoogleApiCl
         // Lets pull the search details out of our usgs url query
         String[] usgsItems = usgsurl.split("&");
         for (int i=1; i<usgsItems.length; i++){
-            aboutMessage += usgsItems[i] + "\n";
+            aboutMessage += "\n" + usgsItems[i];
         }
-        aboutMessage += getString(R.string.count) + " " + (resultsCount - 1);
+        aboutMessage += "\n" + getString(R.string.count) + " " + (resultsCount - 1);
         //msg.setText(R.string.app_info);
         msg.setText(aboutMessage);
         msg.setPadding(16, 16, 16, 8);
@@ -219,7 +239,6 @@ public class EarthquakeActivity extends AppCompatActivity implements GoogleApiCl
             data = new ArrayList<QuakeData>();
             data.add(new QuakeData(0.0, "NO DATA FOUND of TRY NEW SEARCH", "9999-99-99", "https.earthquakes.usgs.gov"));
         }
-        resultsCount = data.size(); //get the count from our data list for later display
         adapter.clear(); //clear the adapter before adding the loader's data
         adapter.addAll(data);
     }
@@ -266,49 +285,48 @@ public class EarthquakeActivity extends AppCompatActivity implements GoogleApiCl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //update the search method selected except for about.
+        if (item.getItemId() != R.id.about) {
+            searchMethod = item.getTitle().toString();
+            //save the user's most recent search method.
+            myPrefsEditor.putString(searchMethodKey, searchMethod);
+            myPrefsEditor.apply();
+        }
         switch (item.getItemId()) {
             case R.id.one_day_date:
-                searchMethod = item.getTitle().toString();
                 oneDaySearch("time");
                 return true;
             case R.id.one_day_mag:
-                searchMethod = item.getTitle().toString();
                 oneDaySearch("magnitude");
                 return true;
             case R.id.recent_significant_D:
-                searchMethod = item.getTitle().toString();
                 defaultSearch("time");
                 return true;
             case R.id.recent_significant_M:
-                searchMethod = item.getTitle().toString();
                 defaultSearch("magnitude");
                 return true;
             case R.id.nearby_100_D:
-                searchMethod = item.getTitle().toString();
                 preNearBySearch("time", "100");
                 return true;
             case R.id.nearby_100_M:
-                searchMethod = item.getTitle().toString();
                 preNearBySearch("magnitude", "100");
                 return true;
             case R.id.nearby_250_D:
-                searchMethod = item.getTitle().toString();
                 preNearBySearch("time", "250");
                 return true;
             case R.id.nearby_250_M:
-                searchMethod = item.getTitle().toString();
                 preNearBySearch("magnitude", "250");
                 return true;
             case R.id.custom_search:
-                searchMethod = item.getTitle().toString();
                 Intent searchIntent = new Intent(this, CustomSearchActivity.class);
                 startActivityForResult(searchIntent, MY_RESULT);
                 return true;
             case R.id.about:
                 aboutDialog();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override //This method gets the returned data from the Custom Search Activity.
@@ -326,6 +344,7 @@ public class EarthquakeActivity extends AppCompatActivity implements GoogleApiCl
         if (mGoogleApiClient != null) {
             mGoogleApiClient.disconnect();
         }
+        myPrefsEditor.commit(); //make sure preferences get saved.
         super.onStop();
     }
 }
